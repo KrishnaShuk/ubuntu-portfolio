@@ -2,18 +2,39 @@
 import Desktop from "@/components/desktop/Desktop";
 import Dock from "@/components/desktop/Dock";
 import TopBar from "@/components/desktop/TopBar";
+import ProjectsWindowServer from "@/components/windows/ProjectsWindowServer";
+import ChromeWindow from "@/components/windows/ChromeWindow";
+import VSCodeServer from "@/components/windows/VSCodeServer";
+// --- 1. IMPORT THE NEW TERMINAL COMPONENT ---
+import TerminalWindow from "@/components/windows/TerminalWindow";
 
 export default function Home() {
+  const appContents = {
+    'files': <ProjectsWindowServer />,
+    'chrome': <ChromeWindow />,
+    'vscode': <VSCodeServer />,
+    // --- 2. ADD TERMINAL TO THE MAP ---
+    'terminal': <TerminalWindow />,
+  };
   return (
-    // CHANGED: The background image is now on the top-level container
-    <main 
-      className="h-screen w-screen flex flex-col bg-cover bg-center"
-      style={{ backgroundImage: "url(/wallpaper.jpg)" }}
-    >
-      <TopBar />
-      <div className="flex flex-1 overflow-hidden">
-        <Dock />
-        <Desktop />
+    <main className="h-screen w-screen bg-black relative">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+      >
+        <source src="/live-wallpaper.mp4" type="video/mp4" />
+      </video>
+
+      <div className="relative z-10 h-full w-full flex flex-col">
+        <TopBar />
+        <div className="flex flex-1 overflow-hidden">
+          {/* Pass the pre-rendered content down to the client */}
+          <Dock appContents={appContents} />
+          <Desktop />
+        </div>
       </div>
     </main>
   );

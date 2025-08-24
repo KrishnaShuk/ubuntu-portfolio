@@ -1,10 +1,12 @@
 // store/desktopStore.ts
 import { create } from 'zustand';
+import React from 'react'; // Import React for the ReactNode type
 
 export interface AppWindow {
   id: string;
   title: string;
   icon: string;
+  content: React.ReactNode; // This will hold the window's component
   zIndex: number;
   isMinimized: boolean;
   isMaximized: boolean;
@@ -58,7 +60,7 @@ export const useDesktopStore = create<DesktopState>((set) => ({
     const highestZIndex = getHighestZIndex(state.windows);
     return {
       windows: state.windows.map(w =>
-        w.id === id ? { ...w, zIndex: highestZIndex + 1, isMinimized: false } : w
+        w.id === id ? { ...w, zIndex: highestZIndex + 1 } : w
       ),
     };
   }),

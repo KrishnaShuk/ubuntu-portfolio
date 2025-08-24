@@ -4,6 +4,7 @@
 import { useDesktopStore } from '@/store/desktopStore';
 import Image from 'next/image';
 import { clsx } from 'clsx';
+import React from 'react'; // Import React for ReactNode type
 
 const apps = [
   { id: 'files', title: 'File Explorer', icon: '/icons/folder.svg' },
@@ -14,7 +15,8 @@ const apps = [
   { id: 'help', title: 'Help', icon: '/icons/help.svg' },
 ];
 
-export default function Dock() {
+// This component now expects the 'appContents' prop
+export default function Dock({ appContents }: { appContents: { [key: string]: React.ReactNode } }) {
   const { windows, openWindow } = useDesktopStore();
 
   const handleOpen = (appId: string) => {
@@ -22,6 +24,7 @@ export default function Dock() {
       console.log('Show All Apps grid!');
       return;
     }
+
     const appConfig = apps.find((a) => a.id === appId);
     if (!appConfig) return;
 
@@ -29,13 +32,14 @@ export default function Dock() {
       id: appConfig.id,
       title: appConfig.title,
       icon: appConfig.icon,
+      content: appContents[appId] || <p>Content for {appId} not found.</p>, // Get content from props
       position: { x: 150, y: 150 },
       size: { width: 700, height: 500 },
     });
   };
 
   return (
-    <div className="w-29 bg-dock/60 flex flex-col items-center py-3 space-y-4 z-40 flex-shrink-0">
+    <div className="w-15 bg-dock/60 flex flex-col items-center py-3 space-y-4 z-40 flex-shrink-0 backdrop-blur-md">
       {apps.map((app) => {
         const isOpen = windows.some(w => w.id === app.id);
         return (
@@ -43,11 +47,11 @@ export default function Dock() {
             <button
               onClick={() => handleOpen(app.id)}
               className={clsx(
-                "w-17 h-17  hover:bg-white/10 rounded-lg grid place-items-center transition-all duration-200",
-                { "bg-white/30": isOpen }
+                "w-18 h-15 p-1 hover:bg-white/10 rounded-lg grid place-items-center transition-all duration-200",
+                { "bg-white/10": isOpen }
               )}
             >
-              <Image src={app.icon} alt={app.title} width={50} height={50} />
+              <Image src={app.icon} alt={app.title} width={40} height={32} />
             </button>
             <span 
               className="absolute left-9 top-1/2 -translate-y-1/2 ml-4 px-3 py-1.5 

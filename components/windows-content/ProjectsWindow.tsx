@@ -7,12 +7,12 @@ export default function ProjectsWindow() {
     <div className="flex h-full bg-window-bg text-text-light">
       {/* Sidebar */}
       <div className="w-48 bg-window-header p-2">
-        <h3 className="font-bold mb-2">Favorites</h3>
+        <h3 className="font-bold mb-2">Sections</h3>
         <ul>
-          <li className="p-1 rounded bg-theme-accent text-white">Home</li>
-          <li className="p-1 rounded hover:bg-white/10">Documents</li>
-          <li className="p-1 rounded hover:bg-white/10">Downloads</li>
-          <li className="p-1 rounded hover:bg-white/10">Desktop</li>
+          <li className="p-1 rounded bg-theme-accent text-white">About Me</li>
+          <li className="p-1 rounded hover:bg-white/10">Projects</li>
+          <li className="p-1 rounded hover:bg-white/10">Experience</li>
+          <li className="p-1 rounded hover:bg-white/10">Contributions</li>
         </ul>
       </div>
 
