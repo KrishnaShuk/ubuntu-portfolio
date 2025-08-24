@@ -35,7 +35,7 @@ export default function Dock() {
   };
 
   return (
-    <div className="w-15 bg-dock/60 flex flex-col items-center py-3 space-y-4 z-40 flex-shrink-0 backdrop-blur-md">
+    <div className="w-29 bg-dock/60 flex flex-col items-center py-3 space-y-4 z-40 flex-shrink-0">
       {apps.map((app) => {
         const isOpen = windows.some(w => w.id === app.id);
         return (
@@ -43,11 +43,11 @@ export default function Dock() {
             <button
               onClick={() => handleOpen(app.id)}
               className={clsx(
-                "w-18 h-15 p-1 hover:bg-white/10 rounded-lg grid place-items-center transition-all duration-200",
-                { "bg-white/10": isOpen }
+                "w-17 h-17  hover:bg-white/10 rounded-lg grid place-items-center transition-all duration-200",
+                { "bg-white/30": isOpen }
               )}
             >
-              <Image src={app.icon} alt={app.title} width={40} height={32} />
+              <Image src={app.icon} alt={app.title} width={50} height={50} />
             </button>
             <span 
               className="absolute left-9 top-1/2 -translate-y-1/2 ml-4 px-3 py-1.5 
