@@ -10,7 +10,6 @@ export interface AppWindow {
   isMaximized: boolean;
   position: { x: number; y: number };
   lastPosition?: { x: number; y: number };
-  // --- CHANGED: Allow size properties to be number OR string ---
   size: { width: number | string; height: number | string };
   lastSize?: { width: number | string; height: number | string };
 }
@@ -23,7 +22,6 @@ interface DesktopState {
   toggleMinimize: (id: string) => void;
   toggleMaximize: (id: string) => void;
   updateWindowPosition: (id: string, position: { x: number; y: number }) => void;
-  // --- CHANGED: The 'size' parameter now accepts strings ---
   updateWindowSize: (id: string, size: { width: string; height: string }) => void;
 }
 
@@ -34,10 +32,10 @@ const getHighestZIndex = (windows: AppWindow[]) => {
 
 export const useDesktopStore = create<DesktopState>((set) => ({
   windows: [],
-  
-  // No changes to the actions below until updateWindowSize
+
   openWindow: (app) => set((state) => {
-    if (state.windows.some(w => w.id === app.id)) {
+    const existingWindow = state.windows.find(w => w.id === app.id);
+    if (existingWindow) {
       return {
         windows: state.windows.map(w =>
           w.id === app.id ? { ...w, zIndex: getHighestZIndex(state.windows) + 1, isMinimized: false } : w
@@ -51,9 +49,11 @@ export const useDesktopStore = create<DesktopState>((set) => ({
       ],
     };
   }),
+
   closeWindow: (id) => set((state) => ({
     windows: state.windows.filter(w => w.id !== id),
   })),
+
   focusWindow: (id) => set((state) => {
     const highestZIndex = getHighestZIndex(state.windows);
     return {
@@ -62,11 +62,13 @@ export const useDesktopStore = create<DesktopState>((set) => ({
       ),
     };
   }),
+
   toggleMinimize: (id) => set((state) => ({
     windows: state.windows.map(w =>
       w.id === id ? { ...w, isMinimized: !w.isMinimized } : w
     ),
   })),
+
   toggleMaximize: (id) => set((state) => ({
     windows: state.windows.map(w => {
       if (w.id === id) {
@@ -85,13 +87,13 @@ export const useDesktopStore = create<DesktopState>((set) => ({
       return w;
     }),
   })),
+
   updateWindowPosition: (id, position) => set((state) => ({
     windows: state.windows.map(w =>
       w.id === id ? { ...w, position } : w
     ),
   })),
 
-  // --- CHANGED: The 'size' parameter type is now correct ---
   updateWindowSize: (id, size) => set((state) => ({
     windows: state.windows.map(w =>
       w.id === id ? { ...w, size } : w

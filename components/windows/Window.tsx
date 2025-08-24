@@ -1,6 +1,7 @@
 // components/windows/Window.tsx
 'use client';
 
+import { motion } from 'framer-motion';
 import { Rnd, DraggableData, ResizableDelta } from 'react-rnd';
 import { DraggableEvent } from 'react-draggable';
 import { useDesktopStore, AppWindow } from '@/store/desktopStore';
@@ -30,7 +31,7 @@ export default function Window({ app, children }: WindowProps) {
       size={app.isMaximized ? { width: '100%', height: '100%' } : app.size}
       position={app.isMaximized ? { x: 0, y: 0 } : app.position}
       onDragStop={(_e: DraggableEvent, d: DraggableData) => {
-        if (d.y < 1) {
+        if (d.y < 10) { 
           toggleMaximize(app.id);
         } else {
           updateWindowPosition(app.id, { x: d.x, y: d.y });
@@ -43,77 +44,71 @@ export default function Window({ app, children }: WindowProps) {
         _delta: ResizableDelta,
         _position: { x: number; y: number }
       ) => {
-        const finalWidth = parseInt(ref.style.width, 10);
-        const finalHeight = parseInt(ref.style.height, 10);
-        const newWidth = Math.max(MIN_WIDTH, finalWidth);
-        const newHeight = Math.max(MIN_HEIGHT, finalHeight);
+        const newWidth = Math.max(MIN_WIDTH, parseInt(ref.style.width, 10));
+        const newHeight = Math.max(MIN_HEIGHT, parseInt(ref.style.height, 10));
         updateWindowSize(app.id, {
           width: `${newWidth}px`,
           height: `${newHeight}px`,
         });
       }}
-      onDragStart={() => focusWindow(app.id)}
       onMouseDown={() => focusWindow(app.id)}
       bounds="parent"
       minWidth={MIN_WIDTH}
       minHeight={MIN_HEIGHT}
-      style={{ zIndex: app.zIndex }}
-      className="border border-window-header/50 rounded-t-lg overflow-hidden bg-window-bg shadow-lg flex flex-col"
       dragHandleClassName="window-header"
       disableDragging={app.isMaximized}
       enableResizing={!app.isMaximized}
+      style={{ zIndex: app.zIndex }} 
     >
-      {/* --- MODIFIED SECTION: Window Header --- */}
-      <div
-        className="window-header h-8 bg-window-header flex items-center justify-between px-2 cursor-pointer flex-shrink-0"
-        onDoubleClick={() => toggleMaximize(app.id)}
+      <motion.div
+        className="w-full h-full border border-window-header/50 rounded-lg shadow-lg bg-window-bg flex flex-col overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.1 }}
       >
-        <span className="text-sm font-medium text-text-light select-none pl-2">{app.title}</span>
-
-        <div className="flex items-center space-x-2">
-          {/* Minimize Button (Transparent) */}
-          <button 
-            onClick={() => toggleMinimize(app.id)} 
-            className="w-6 h-6 flex items-center justify-center transition-transform hover:scale-110"
-          >
-            <Image src="/icons/minimize.svg" alt="Minimize" width={24} height={24} />
-          </button>
-          
-          {/* Maximize / Restore Button (Conditional Styling) */}
-          {app.isMaximized ? (
-            // RESTORE BUTTON (Maximized state)
+        <div
+          className="window-header h-8 bg-window-header flex items-center justify-between px-2 cursor-pointer flex-shrink-0"
+          onDoubleClick={() => toggleMaximize(app.id)}
+        >
+          <span className="text-sm font-medium text-text-light select-none pl-2">{app.title}</span>
+          <div className="flex items-center space-x-2">
             <button 
-              onClick={() => toggleMaximize(app.id)} 
-              // Using arbitrary value for the specific color #d1d1d1
-              className="w-5 h-5 rounded-full bg-[#d1d1d1] hover:bg-gray-400 flex items-center justify-center transition-colors"
-            >
-              <Image src="/icons/restore.svg" alt="Restore" width={16} height={16} />
-            </button>
-          ) : (
-            // MAXIMIZE BUTTON (Normal state)
-            <button 
-              onClick={() => toggleMaximize(app.id)} 
+              onClick={(e) => { e.stopPropagation(); toggleMinimize(app.id); }} 
               className="w-6 h-6 flex items-center justify-center transition-transform hover:scale-110"
             >
-              <Image src="/icons/maximize.svg" alt="Maximize" width={24} height={24} />
+              <Image src="/icons/minimize.svg" alt="Minimize" width={24} height={24} />
             </button>
-          )}
-          
-          {/* Close Button (Transparent) */}
-          <button 
-            onClick={() => closeWindow(app.id)} 
-            className="w-6 h-6 flex items-center justify-center transition-transform hover:scale-110"
-          >
-            <Image src="/icons/close.svg" alt="Close" width={24} height={24} />
-          </button>
+            
+            {app.isMaximized ? (
+              <button 
+                onClick={(e) => { e.stopPropagation(); toggleMaximize(app.id); }} 
+                className="w-6 h-6 rounded-full bg-[#d1d1d1] hover:bg-gray-400 flex items-center justify-center transition-colors"
+              >
+                <Image src="/icons/restore.svg" alt="Restore" width={16} height={16} />
+              </button>
+            ) : (
+              <button 
+                onClick={(e) => { e.stopPropagation(); toggleMaximize(app.id); }} 
+                className="w-6 h-6 flex items-center justify-center transition-transform hover:scale-110"
+              >
+                <Image src="/icons/maximize.svg" alt="Maximize" width={24} height={24} />
+              </button>
+            )}
+            
+            <button 
+              onClick={(e) => { e.stopPropagation(); closeWindow(app.id); }} 
+              className="w-6 h-6 flex items-center justify-center transition-transform hover:scale-110"
+            >
+              <Image src="/icons/close.svg" alt="Close" width={24} height={24} />
+            </button>
+          </div>
         </div>
-      </div>
-      {/* --- END OF MODIFIED SECTION --- */}
 
-      {/* Window Content */}
-      <div className="flex-grow p-1 overflow-auto">
-        {children}
-      </div>
+        <div className="flex-grow p-1 overflow-auto">
+          {children}
+        </div>
+      </motion.div>
     </Rnd>
   );
 }

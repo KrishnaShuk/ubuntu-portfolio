@@ -3,7 +3,7 @@
 
 import { useDesktopStore } from '@/store/desktopStore';
 import Image from 'next/image';
-import { clsx } from 'clsx'; // Note: Make sure you have run 'npm install clsx'
+import { clsx } from 'clsx';
 
 const apps = [
   { id: 'files', title: 'File Explorer', icon: '/icons/folder.svg' },
@@ -22,7 +22,6 @@ export default function Dock() {
       console.log('Show All Apps grid!');
       return;
     }
-
     const appConfig = apps.find((a) => a.id === appId);
     if (!appConfig) return;
 
@@ -36,24 +35,20 @@ export default function Dock() {
   };
 
   return (
-    <div className="w-15 bg-dock/60 flex flex-col items-center py-3 space-y-4 z-40 flex-shrink-0 ">
+    <div className="w-15 bg-dock/60 flex flex-col items-center py-3 space-y-4 z-40 flex-shrink-0 backdrop-blur-md">
       {apps.map((app) => {
         const isOpen = windows.some(w => w.id === app.id);
-
         return (
           <div key={app.id} className="relative group">
             <button
               onClick={() => handleOpen(app.id)}
               className={clsx(
                 "w-18 h-15 p-1 hover:bg-white/10 rounded-lg grid place-items-center transition-all duration-200",
-                {
-                  "bg-white/10": isOpen, // This is the permanent background
-                }
+                { "bg-white/10": isOpen }
               )}
             >
               <Image src={app.icon} alt={app.title} width={40} height={32} />
             </button>
-            
             <span 
               className="absolute left-9 top-1/2 -translate-y-1/2 ml-4 px-3 py-1.5 
                          bg-top-bar text-text-light font-bold text-sm rounded-xl
@@ -76,7 +71,6 @@ export default function Dock() {
         >
           <Image src="/ubuntu.svg" alt="Show Apps" width={40} height={32} />
         </button>
-        
         <span 
           className="absolute left-9 top-5 -translate-y-1/2 ml-4 px-3 py-1.5 
                        bg-top-bar text-text-light font-bold text-sm rounded-xl 
