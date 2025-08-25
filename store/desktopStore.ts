@@ -25,8 +25,6 @@ interface DesktopState {
   toggleMaximize: (id: string) => void;
   updateWindowPosition: (id: string, position: { x: number; y: number }) => void;
   updateWindowSize: (id: string, size: { width: string; height: string }) => void;
-  lockScreen: () => void; 
-  unlockScreen: () => void;
 }
 
 const getHighestZIndex = (windows: AppWindow[]) => {
@@ -37,9 +35,6 @@ const getHighestZIndex = (windows: AppWindow[]) => {
 export const useDesktopStore = create<DesktopState>((set) => ({
   windows: [],
   isLocked: true,
-
-  lockScreen: () => null,  // must be removed
-  unlockScreen: () => null, // must be removed
 
 
   openWindow: (app) => set((state) => {
