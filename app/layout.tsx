@@ -4,7 +4,7 @@ import { ubuntu } from '@/lib/fonts' // Import the font
 import './globals.css' // Import the Tailwind styles
 
 export const metadata: Metadata = {
-  title: 'Your Name - Portfolio',
+  title: 'Krishna - Portfolio',
   description: 'My portfolio, running in a simulated Ubuntu OS.',
 }
 
