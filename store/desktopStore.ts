@@ -38,8 +38,8 @@ export const useDesktopStore = create<DesktopState>((set) => ({
   windows: [],
   isLocked: true,
 
-  lockScreen: () => set({ isLocked: true }),
-  unlockScreen: () => set({ isLocked: false }),
+  lockScreen: () => null,  // must be removed
+  unlockScreen: () => null, // must be removed
 
 
   openWindow: (app) => set((state) => {
