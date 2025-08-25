@@ -1,167 +1,171 @@
 // components/windows/TerminalWindow.tsx
 'use client';
 
-import React, { useState, useRef } from 'react';
-import Terminal from 'react-console-emulator';
-
-// --- Type Definitions for OUR internal logic ---
-// This keeps our command functions type-safe.
-interface Command {
-  description: string;
-  fn: (...args: string[]) => string; // All our functions will return a string.
-}
-
-interface Commands {
-  [key: string]: Command;
-}
-
-// --- Simulated File System (Unchanged) ---
-const fileSystem = {
-  '/': {
-    type: 'dir',
-    children: {
-      'home': {
-        type: 'dir',
-        children: {
-          'krishna': {
-            type: 'dir',
-            children: {
-              'projects': { type: 'dir', children: {
-                'portfolio.txt': { type: 'file', content: 'This very portfolio project! Built with Next.js, TypeScript, and Tailwind CSS.'}
-              } },
-              'documents': { type: 'dir', children: {} },
-              'about.txt': { type: 'file', content: `
-Hello! I'm Krishna, a passionate software developer.
-I specialize in building modern, responsive, and user-friendly web applications.` },
-            },
-          },
-        },
-      },
-    },
-  },
-};
-
-const resolvePath = (path: string, cwd: string): string[] => {
-  const newPath = path.startsWith('/') ? [] : cwd.split('/').filter(p => p);
-  path.split('/').forEach(part => {
-    if (part === '..') {
-      newPath.pop();
-    } else if (part !== '.' && part !== '') {
-      newPath.push(part);
-    }
-  });
-  return newPath;
-};
-
-const getNode = (pathArray: string[]) => {
-  let currentNode: any = fileSystem['/'];
-  for (const part of pathArray) {
-    if (currentNode?.type === 'dir' && currentNode.children[part]) {
-      currentNode = currentNode.children[part];
-    } else {
-      return null;
-    }
-  }
-  return currentNode;
-};
-
+import React, { useState, useRef, useEffect } from 'react';
+import { FiMenu, FiSearch } from 'react-icons/fi';
+// --- CHANGED: Import from the new location in the 'data' folder ---
+import { terminal as fileSystemConfig, TerminalData } from '@/data/terminal';
 
 export default function TerminalWindow() {
-  const [cwd, setCwd] = useState(['home', 'krishna']);
-  const terminalRef = useRef<any>(null); // Use 'any' for the ref to the JS library
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState<React.ReactNode[]>([]);
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [currentPath, setCurrentPath] = useState<string[]>([]);
+  
+  const inputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // --- Command Logic (Now fully typed internally) ---
-  const commands: Commands = {
-    help: {
-      description: 'Lists all available commands.',
-      fn: () => {
-        return Object.entries(commands)
-          .map(([cmd, { description }]) => `${cmd.padEnd(10)} - ${description}`)
-          .join('\n');
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [output]);
+  
+  useEffect(() => {
+    setOutput([
+      <div key="welcome">Welcome! Type <span className="text-yellow-300">'help'</span> to get started.</div>
+    ]);
+  }, []);
+
+  const getCurrentChildren = (): TerminalData[] => {
+    let children = fileSystemConfig;
+    for (const part of currentPath) {
+      const dir = children.find(item => item.title === part && item.type === 'folder');
+      if (dir && dir.children) {
+        children = dir.children;
+      } else {
+        return [];
       }
-    },
-    whoami: {
-      description: 'Displays a short bio about me.',
-      fn: () => {
-        return getNode(['home', 'krishna', 'about.txt'])?.content ?? 'Error: about.txt not found.';
+    }
+    return children;
+  };
+
+  const processCommand = (command: string) => {
+    const [cmd, ...args] = command.trim().split(' ');
+    const argString = args.join(' ');
+    const currentChildren = getCurrentChildren();
+    
+    let newOutput: React.ReactNode = `Command not found: ${cmd}. Type 'help'.`;
+
+    if (cmd === 'help') {
+      newOutput = (
+        <ul className="list-inside list-disc">
+          <li><span className="text-yellow-300">ls</span> - List files and directories</li>
+          <li><span className="text-yellow-300">cd &lt;dir&gt;</span> - Change directory ('..' for parent, '~' for root)</li>
+          <li><span className="text-yellow-300">cat &lt;file&gt;</span> - Read file content</li>
+          <li><span className="text-yellow-300">clear</span> - Clear the terminal</li>
+        </ul>
+      );
+    } else if (cmd === 'ls') {
+      if (currentChildren.length > 0) {
+        newOutput = (
+          <div className="flex flex-wrap gap-x-6">
+            {currentChildren.map(child => (
+              <span key={child.id} className={child.type === 'folder' ? 'text-blue-400' : 'text-white'}>
+                {child.title}
+              </span>
+            ))}
+          </div>
+        );
+      } else {
+        newOutput = null; // Empty directory, show nothing
       }
-    },
-    ls: {
-      description: 'Lists files and directories.',
-      fn: (...args: string[]) => {
-        const path = args.length > 0 ? args.join(' ') : '.';
-        const pathArray = resolvePath(path, cwd.join('/'));
-        const node = getNode(pathArray);
-        if (node && node.type === 'dir') {
-          return Object.keys(node.children).map(child => {
-            return node.children[child].type === 'dir' ? `\x1b[1;34m${child}/\x1b[0m` : child;
-          }).join('  ');
+    } else if (cmd === 'cd') {
+      if (!argString || argString === '~') {
+        setCurrentPath([]);
+        newOutput = null;
+      } else if (argString === '..') {
+        setCurrentPath(prev => prev.slice(0, -1));
+        newOutput = null;
+      } else {
+        const targetDir = currentChildren.find(item => item.title === argString && item.type === 'folder');
+        if (targetDir) {
+          setCurrentPath(prev => [...prev, argString]);
+          newOutput = null;
+        } else {
+          newOutput = `cd: no such file or directory: ${argString}`;
         }
-        return `ls: cannot access '${path}': No such file or directory`;
       }
-    },
-    cd: {
-      description: 'Changes the current directory. Usage: cd <directory>',
-      fn: (...args: string[]) => {
-        const path = args.join(' ') || 'home/krishna';
-        const newPathArray = resolvePath(path, cwd.join('/'));
-        const targetNode = getNode(newPathArray);
-        if (targetNode && targetNode.type === 'dir') {
-          setCwd(newPathArray);
-          return ''; // Successful cd has no output
-        }
-        return `cd: no such file or directory: ${path}`;
+    } else if (cmd === 'cat') {
+      const targetFile = currentChildren.find(item => item.title === argString && item.type === 'file');
+      if (targetFile) {
+        newOutput = <pre className="whitespace-pre-wrap">{targetFile.content}</pre>;
+      } else {
+        newOutput = `cat: ${argString}: No such file or directory`;
       }
-    },
-    cat: {
-      description: 'Displays the content of a file. Usage: cat <file>',
-      fn: (...args: string[]) => {
-        const path = args.join(' ');
-        if (!path) return 'cat: missing operand';
-        const filePathArray = resolvePath(path, cwd.join('/'));
-        const fileNode = getNode(filePathArray);
-        if (fileNode && fileNode.type === 'file') {
-          return fileNode.content ?? '';
-        }
-        return `cat: ${path}: No such file or directory`;
+    } else if (cmd === 'clear') {
+      setOutput([]);
+      return;
+    }
+
+    const pathString = currentPath.length > 0 ? `~/${currentPath.join('/')}` : '~';
+    const prompt = <Prompt path={pathString} />;
+    setOutput(prev => [...prev, <div key={prev.length}>{prompt}{command}</div>, newOutput && <div key={prev.length + 1}>{newOutput}</div>]);
+    setHistory(prev => [command, ...prev]);
+    setHistoryIndex(-1);
+    setInput('');
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      processCommand(input);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex < history.length - 1) {
+        const newIndex = historyIndex + 1;
+        setHistoryIndex(newIndex);
+        setInput(history[newIndex]);
       }
-    },
-    echo: {
-      description: 'Prints text to the console. Usage: echo <text>',
-      fn: (...args: string[]) => args.join(' ')
-    },
-    clear: {
-      description: 'Clears the console screen.',
-      fn: () => {
-        if (terminalRef.current) {
-          terminalRef.current.clear();
-        }
-        return '';
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setInput(history[newIndex]);
+      } else {
+        setHistoryIndex(-1);
+        setInput('');
       }
     }
   };
 
-  const currentPath = `/${cwd.join('/') || ''}`;
+  const Prompt = ({ path }: { path: string }) => (
+    <span className="flex-shrink-0">
+      <span className="text-green-400">krishna@krishna-inspiron-15-3511</span>
+      <span className="text-white">:</span>
+      <span className="text-blue-400">{path}</span>
+      <span className="text-white">$ </span>
+    </span>
+  );
+
+  const pathString = currentPath.length > 0 ? `~/${currentPath.join('/')}` : '~';
 
   return (
-    <div className="flex flex-col h-full bg-[#1e1e1e] text-white font-mono rounded-b-lg p-1 text-sm">
-      <Terminal
-        ref={terminalRef}
-        // This 'as any' cast is the key to solving the type errors.
-        // It tells TypeScript to trust our object structure for this JS-based library.
-        commands={commands as any}
-        noDefaults 
-        welcomeMessage={"Welcome to My Portfolio Terminal! Type 'help' to see available commands."}
-        promptLabel={`krishna@ubuntu:~${currentPath}$ `}
-        promptLabelStyle={{ color: '#4b8501' }}
-        inputStyle={{ color: '#ffffff' }}
-        style={{
-          backgroundColor: '#1e1e1e',
-          color: '#ffffff',
-          width: '100%',
-          height: '100%',
-        }}
-      />
+    <div className="flex flex-col h-full bg-[#2E0329] text-white/90 font-mono rounded-b-lg text-sm" onClick={() => inputRef.current?.focus()}>
+      <div className="h-8 bg-[#1f1f1f] flex items-center justify-between px-2 flex-shrink-0 border-b border-black/30">
+        <span className="pl-1">krishna@krishna-inspiron-15-3511</span>
+        <div className="flex items-center space-x-2">
+            <button className="p-1 rounded hover:bg-white/10"><FiSearch size={14}/></button>
+            <button className="p-1 rounded hover:bg-white/10"><FiMenu size={14}/></button>
+        </div>
+      </div>
+
+      <div ref={scrollRef} className="flex-1 p-2 overflow-y-auto">
+        {output}
+        <div className="flex">
+          <Prompt path={pathString} />
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 bg-transparent focus:outline-none"
+            autoFocus
+          />
+        </div>
+      </div>
     </div>
   );
 }

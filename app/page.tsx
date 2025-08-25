@@ -5,16 +5,18 @@ import TopBar from "@/components/desktop/TopBar";
 import ProjectsWindowServer from "@/components/windows/ProjectsWindowServer";
 import ChromeWindow from "@/components/windows/ChromeWindow";
 import VSCodeServer from "@/components/windows/VSCodeServer";
-// --- 1. IMPORT THE NEW TERMINAL COMPONENT ---
+import AppCenterWindow from "@/components/windows/AppCenterWindow";
 import TerminalWindow from "@/components/windows/TerminalWindow";
+import AboutPortfolioWindow from "@/components/windows/AboutPortfolioWindow";
 
 export default function Home() {
   const appContents = {
     'files': <ProjectsWindowServer />,
     'chrome': <ChromeWindow />,
     'vscode': <VSCodeServer />,
-    // --- 2. ADD TERMINAL TO THE MAP ---
     'terminal': <TerminalWindow />,
+    'appstore': <AppCenterWindow />,
+    'about-portfolio': <AboutPortfolioWindow />,
   };
   return (
     <main className="h-screen w-screen bg-black relative">
@@ -33,7 +35,7 @@ export default function Home() {
         <div className="flex flex-1 overflow-hidden">
           {/* Pass the pre-rendered content down to the client */}
           <Dock appContents={appContents} />
-          <Desktop />
+          <Desktop appContents={appContents} />
         </div>
       </div>
     </main>

@@ -12,7 +12,7 @@ const apps = [
   { id: 'terminal', title: 'Terminal', icon: '/icons/terminal.svg' },
   { id: 'vscode', title: 'VS Code', icon: '/icons/vscode.svg' },
   { id: 'chrome', title: 'Google Chrome', icon: '/icons/chrome.svg' },
-  { id: 'help', title: 'Help', icon: '/icons/help.svg' },
+  { id: 'about-portfolio', title: 'About this Portfolio', icon: '/icons/help.svg' },
 ];
 
 // This component now expects the 'appContents' prop

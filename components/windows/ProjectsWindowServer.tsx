@@ -1,32 +1,34 @@
 // components/windows/ProjectsWindowServer.tsx
 import { promises as fs } from 'fs';
 import path from 'path';
-import ProjectsWindowClient from './ProjectsWindowClient'; 
+import { projects } from '@/data/projects';
+// --- 1. IMPORT THE NEW CONTRIBUTIONS DATA ---
+import { contributions } from '@/data/contributions'; 
+import ProjectsWindowClient from './ProjectsWindowClient';
 
-// This is a Server Component (no 'use client')
 export default async function ProjectsWindowServer() {
   const dataPath = path.join(process.cwd(), 'data', 'mydata');
   
   try {
-    const [about, projects, experience, contributions] = await Promise.all([
+    const [about, experience] = await Promise.all([
       fs.readFile(path.join(dataPath, 'about.md'), 'utf8'),
-      fs.readFile(path.join(dataPath, 'projects.md'), 'utf8'),
       fs.readFile(path.join(dataPath, 'experience.md'), 'utf8'),
-      fs.readFile(path.join(dataPath, 'contributions.md'), 'utf8'),
     ]);
 
-    const allContent = {
+    const markdownContent = {
       'About Me': about,
-      'Projects': projects,
       'Experience': experience,
-      'Contributions': contributions,
     };
 
-    // Render the Client Component, passing the fetched data as a prop
-    return <ProjectsWindowClient initialContent={allContent} />;
+    // --- 2. PASS THE CONTRIBUTIONS ARRAY AS A PROP ---
+    return <ProjectsWindowClient 
+      markdownContent={markdownContent} 
+      projects={projects} 
+      contributions={contributions} 
+    />;
     
   } catch (error) {
-    console.error("Failed to read project files:", error);
+    console.error("Failed to read content files:", error);
     return <div className="p-4 text-red-500">Error: Could not load content.</div>;
   }
 }
