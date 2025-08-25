@@ -4,7 +4,7 @@ import Dock from "@/components/desktop/Dock";
 import TopBar from "@/components/desktop/TopBar";
 import ProjectsWindowServer from "@/components/windows/ProjectsWindowServer";
 import ChromeWindow from "@/components/windows/ChromeWindow";
-import VSCodeServer from "@/components/windows/VSCodeServer";
+import VSCodeWindow from "@/components/windows/VSCodeWindow";
 import AppCenterWindow from "@/components/windows/AppCenterWindow";
 import TerminalWindow from "@/components/windows/TerminalWindow";
 import AboutPortfolioWindow from "@/components/windows/AboutPortfolioWindow";
@@ -13,7 +13,7 @@ export default function Home() {
   const appContents = {
     'files': <ProjectsWindowServer />,
     'chrome': <ChromeWindow />,
-    'vscode': <VSCodeServer />,
+    'vscode': <VSCodeWindow />,
     'terminal': <TerminalWindow />,
     'appstore': <AppCenterWindow />,
     'about-portfolio': <AboutPortfolioWindow />,
