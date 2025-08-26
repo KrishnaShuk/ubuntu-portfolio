@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import { ubuntu } from '@/lib/fonts' // Import the font
 import './globals.css' // Import the Tailwind styles
+import GoogleAnalytics from '@/components/utils/GoogleAnalytics';
 
 export const metadata: Metadata = {
   title: 'Krishna Shukla - Portfolio', 
@@ -20,7 +21,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={ubuntu.className}>
-      <body className="bg-window-bg text-text-light">{children}</body>
+      <body className="bg-window-bg text-text-light">
+        <GoogleAnalytics />
+        {children}
+      </body>
     </html>
   )
 }
