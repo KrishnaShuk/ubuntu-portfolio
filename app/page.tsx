@@ -5,8 +5,8 @@ import TopBar from "@/components/desktop/TopBar";
 import ProjectsWindowServer from "@/components/windows/ProjectsWindowServer";
 import ChromeWindow from "@/components/windows/ChromeWindow";
 import VSCodeWindow from "@/components/windows/VSCodeWindow";
-import AppCenterWindow from "@/components/windows/AppCenterWindow";
 import TerminalWindow from "@/components/windows/TerminalWindow";
+import AppCenterWindow from "@/components/windows/AppCenterWindow";
 import AboutPortfolioWindow from "@/components/windows/AboutPortfolioWindow";
 
 export default function Home() {
@@ -18,6 +18,7 @@ export default function Home() {
     'appstore': <AppCenterWindow />,
     'about-portfolio': <AboutPortfolioWindow />,
   };
+
   return (
     <main className="h-screen w-screen bg-black relative">
       <video
@@ -30,10 +31,12 @@ export default function Home() {
         <source src="/live-wallpaper.mp4" type="video/mp4" />
       </video>
 
+      {/* Main UI shell with responsive flex direction */}
       <div className="relative z-10 h-full w-full flex flex-col">
+        {/* TopBar is always at the top */}
         <TopBar />
-        <div className="flex flex-1 overflow-hidden">
-          {/* Pass the pre-rendered content down to the client */}
+        {/* This container handles the main layout */}
+        <div className="flex flex-1 overflow-hidden pb-16 md:pb-0">
           <Dock appContents={appContents} />
           <Desktop appContents={appContents} />
         </div>

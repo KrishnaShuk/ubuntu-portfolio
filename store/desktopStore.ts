@@ -1,12 +1,12 @@
 // store/desktopStore.ts
 import { create } from 'zustand';
-import React from 'react'; // Import React for the ReactNode type
+import React from 'react';
 
 export interface AppWindow {
   id: string;
   title: string;
   icon: string;
-  content: React.ReactNode; // This will hold the window's component
+  content: React.ReactNode;
   zIndex: number;
   isMinimized: boolean;
   isMaximized: boolean;
@@ -34,11 +34,23 @@ const getHighestZIndex = (windows: AppWindow[]) => {
 
 export const useDesktopStore = create<DesktopState>((set) => ({
   windows: [],
-  isLocked: true,
-
 
   openWindow: (app) => set((state) => {
+    // Use md (768px) as the breakpoint between mobile and desktop
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const existingWindow = state.windows.find(w => w.id === app.id);
+    
+    // Mobile logic: Only ever allow one window in the state.
+    if (isMobile) {
+      if (existingWindow) {
+        // If it's already open, do nothing.
+        return { windows: [{ ...existingWindow, isMinimized: false, isMaximized: true }] };
+      }
+      // If a new window is opened, it replaces any other.
+      return { windows: [{ ...app, zIndex: 1, isMinimized: false, isMaximized: true }] };
+    }
+
+    // Desktop logic (unchanged)
     if (existingWindow) {
       return {
         windows: state.windows.map(w =>
