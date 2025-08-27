@@ -54,7 +54,6 @@ export default function Dock({ appContents }: { appContents: { [key: string]: Re
                   "scale-90 opacity-80 md:scale-100 md:opacity-100": !isOpen
                 }
               )}
-              title={app.title}
             >
               <Image src={app.icon} alt={app.title} width={50} height={50}  />
             </button>
