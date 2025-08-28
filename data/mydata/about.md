@@ -3,6 +3,8 @@ Hey! I am Krishna. I am an undergraduate student at IT engineering department wi
 Like to build end to end software products on web. (from idea to deployment and maintainance).
 In free time I generally contribute to open source or make projects on new technologies.
 
+X account: [@krishnashuk_](https://x.com/krishnashuk_)
+
 Some ideas that i believe and working on:
 -  In all Life, when a thing works better, **usually it is more beautiful to the eye**.
 - True beauty is built equally on the **inside and the outside.**  (Yeah! this idea is borrowed from Steve Jobs)
