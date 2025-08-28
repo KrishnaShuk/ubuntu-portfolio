@@ -16,7 +16,6 @@ export const projects: Project[] = [
     description: "This project is a fully interactive portfolio designed as a pixel-perfect simulation of my Ubuntu desktop environment. It's a deep dive into complex UI/UX development, creating an immersive and memorable way to explore my work through draggable windows, a functional dock, and detailed application clones, all running seamlessly in the browser.",
     techStack: ['Next.js','TypeScript','Tailwind CSS','Zustand','Framer Motion'],
     liveUrl: 'https://krishnashukla.site',
-    githubUrl: 'https://github.com/your-repo',
     image: '/projects/ecommerce.jpg', 
   },
   {
@@ -24,8 +23,8 @@ export const projects: Project[] = [
     name: 'Pdfpod',
     description: "Pdfpod is a full-stack, intelligent document assistant designed to make dense information accessible and engaging. Users can securely upload documents and, instead of reading, ask questions to receive context-aware answers through a dynamic chat interface built on a Retrieval-Augmented Generation (RAG) pipeline.The standout feature is the ability to transform any document into a shareable, single-speaker audio summary. Leveraging a sophisticated backend, the application orchestrates a multi-step, asynchronous job that generates a script with Google's Gemini, converts it to speech with Google Cloud TTS, and stores the final podcast in the cloud. The project demonstrates a complete, modern development lifecycle, from secure user authentication to asynchronous background processing and multi-modal AI generation.",
     techStack: ['Next.js','TypeScript','Tailwind CSS','Node.js','Express.js','MongoDB','Qdrant','Redis','BullMQ','LangChain.js','Google Gemini','Google Cloud Text-to-Speech','Clerk','Zustand','Framer Motion','Cloudflare R2','Vercel','Render'],
-    liveUrl: 'https://live-demo.com',
-    githubUrl: 'https://github.com/your-repo',
+    liveUrl: 'https://client-one-peach.vercel.app',
+    githubUrl: 'https://github.com/KrishnaShuk/server',
     image: '/projects/ecommerce.jpg', 
   },
   {
