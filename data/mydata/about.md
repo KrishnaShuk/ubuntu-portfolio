@@ -7,6 +7,8 @@ X account: [@krishnashuk_](https://x.com/krishnashuk_)
 
 Email Id: shuklakrishna.kris@gmail.com
 
+Github: [@KrishnaShuk](https://github.com/KrishnaShuk)
+
 Some ideas that i believe and working on:
 -  In all Life, when a thing works better, **usually it is more beautiful to the eye**.
 - True beauty is built equally on the **inside and the outside.**  (Yeah! this idea is borrowed from Steve Jobs)
