@@ -4,6 +4,7 @@ Like to build end to end software products on web. (from idea to deployment and 
 In free time I generally contribute to open source or make projects on new technologies.
 
 X account: [@krishnashuk_](https://x.com/krishnashuk_)
+
 Email Id: shuklakrishna.kris@gmail.com
 
 Some ideas that i believe and working on:
