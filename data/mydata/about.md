@@ -19,4 +19,5 @@ Some ideas that i believe and working on:
 - You can do more than you think. Don't underestimate yourself.
 - Every opportunity well handed leads to more. (People listening to founder's podcast can relate)
 
+
 Writing down the ideas I follow is harder than I expected, and this list may change depending on the situations.
