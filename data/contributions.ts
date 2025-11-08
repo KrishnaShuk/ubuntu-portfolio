@@ -1,9 +1,8 @@
-// data/contributions.ts
 export interface Contribution {
   id: string;
-  repo: string; // e.g., "vercel/next.js"
+  repo: string; 
   description: string;
-  url: string; // The full URL to the pull request or issue
+  url: string; 
 }
 
 export const contributions: Contribution[] = [

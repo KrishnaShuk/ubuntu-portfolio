@@ -1,4 +1,3 @@
-// components/windows/ChromeWindow.tsx
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +5,6 @@ import { FiArrowLeft, FiArrowRight, FiRotateCw, FiHome, FiLock, FiStar, FiPlus, 
 import { clsx } from 'clsx';
 import Image from 'next/image';
 
-// Define the shape of a single tab
 interface Tab {
   id: number;
   title: string;
@@ -14,7 +12,7 @@ interface Tab {
   favicon: string;
 }
 
-const DEFAULT_URL = 'https://www.google.com/webhp?igu=1'; // Using a simplified Google homepage
+const DEFAULT_URL = 'https://www.google.com/webhp?igu=1'; 
 
 export default function ChromeWindow() {
   const [tabs, setTabs] = useState<Tab[]>([
