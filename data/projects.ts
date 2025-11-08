@@ -1,22 +1,21 @@
-// data/projects.ts
 export interface Project {
   id: string;
   name: string;
   description: string;
   techStack: string[];
-  liveUrl?: string; // Optional link to live demo
-  githubUrl?: string; // Optional link to GitHub repo
-  image: string; // Path to a screenshot in /public/projects/
+  liveUrl?: string; 
+  githubUrl?: string;
+  image: string; 
 }
 
 export const projects: Project[] = [
   {
-    id: 'project-0',
-    name: 'Ubuntu-Portfolio',
-    description: "This project is a fully interactive portfolio designed as a pixel-perfect simulation of my Ubuntu desktop environment. It's a deep dive into complex UI/UX development, creating an immersive and memorable way to explore my work through draggable windows, a functional dock, and detailed application clones, all running seamlessly in the browser.",
-    techStack: ['Next.js','TypeScript','Tailwind CSS','Zustand','Framer Motion'],
-    liveUrl: 'https://krishnashukla.site',
-    image: '/projects/ecommerce.jpg', 
+    id: 'project-10',
+    name: 'SketchBoard',
+    description: "SketchBoard is a full-stack, open-source digital whiteboard application inspired by tools like Excalraw and Miro. Built with a modern technology stack, it provides a real-time, collaborative canvas for users to sketch ideas, create diagrams, and brainstorm visually.",
+    techStack: ['Turborepo','Next.js','TypeScript','PostgreSQL','Prisma','WebSockets'],
+    githubUrl: "https://github.com/KrishnaShuk/SketchBoard",
+    image: '/projects/ecommerce.jpg',
   },
   {
     id: 'project-1',
@@ -24,7 +23,7 @@ export const projects: Project[] = [
     description: "Pdfpod is a full-stack, intelligent document assistant designed to make dense information accessible and engaging. Users can securely upload documents and, instead of reading, ask questions to receive context-aware answers through a dynamic chat interface built on a Retrieval-Augmented Generation (RAG) pipeline.The standout feature is the ability to transform any document into a shareable, single-speaker audio summary. Leveraging a sophisticated backend, the application orchestrates a multi-step, asynchronous job that generates a script with Google's Gemini, converts it to speech with Google Cloud TTS, and stores the final podcast in the cloud. The project demonstrates a complete, modern development lifecycle, from secure user authentication to asynchronous background processing and multi-modal AI generation.",
     techStack: ['Next.js','TypeScript','Tailwind CSS','Node.js','Express.js','MongoDB','Qdrant','Redis','BullMQ','LangChain.js','Google Gemini','Google Cloud Text-to-Speech','Clerk','Zustand','Framer Motion','Cloudflare R2','Vercel','Render'],
     liveUrl: 'https://client-one-peach.vercel.app',
-    githubUrl: 'https://github.com/KrishnaShuk/server',
+    githubUrl: 'https://github.com/KrishnaShuk/Pdfpod-client',
     image: '/projects/ecommerce.jpg', 
   },
   {
@@ -44,6 +43,23 @@ export const projects: Project[] = [
     githubUrl: 'https://github.com/KrishnaShuk/Faq-detection',
     liveUrl: 'https://medium.com/@shuklakrishna.kris/automating-repetitive-questions-in-rocket-chat-with-ai-building-the-faq-detection-assistant-e93b2fcb55ac',
     image: '/projects/task-app.jpg',
+  },
+  {
+    id: 'project-9',
+    name: 'Habit-tracker',
+    description: "Habit Track is a modern, full-stack web application designed to help users build better habits through personal tracking and social accountability. Users can create, manage, and track their daily and weekly goals in a vibrant, motivating interface. The application also features a social component, allowing users to follow friends and view their progress in a beautifully designed Friends Dashboard.This project was built from the ground up to demonstrate proficiency in modern web development practices, including full-stack development with Next.js, database integration with MongoDB, user authentication, and containerization with Docker.",
+    techStack: ['Next.js','TypeScript','MongoDB','Docker & Docker Compose'],
+    liveUrl: 'https://habit-tracker-krishna.vercel.app/',
+    githubUrl: 'https://github.com/KrishnaShuk/habit-tracker',
+    image: '/projects/ecommerce.jpg',
+  },
+  {
+    id: 'project-0',
+    name: 'Ubuntu-Portfolio',
+    description: "This project is a fully interactive portfolio designed as a pixel-perfect simulation of my Ubuntu desktop environment. It's a deep dive into complex UI/UX development, creating an immersive and memorable way to explore my work through draggable windows, a functional dock, and detailed application clones, all running seamlessly in the browser.",
+    techStack: ['Next.js','TypeScript','Tailwind CSS','Zustand','Framer Motion'],
+    liveUrl: 'https://krishnashukla.site',
+    image: '/projects/ecommerce.jpg', 
   },
   {
     id: 'project-4',
