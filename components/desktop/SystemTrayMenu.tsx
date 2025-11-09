@@ -1,15 +1,12 @@
-// components/desktop/SystemTrayMenu.tsx
-'use client'; // This component now uses state and interactivity
+'use client';
 
 import Image from 'next/image';
 import React, { useState } from 'react';
 
-// Reusable Slider with a visual progress track
 const Slider = ({ iconSrc, alt, value, onChange }: { iconSrc: string; alt: string; value: number; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
   <div className="flex items-center space-x-3 px-2 py-1.5">
     <Image src={iconSrc} alt={alt} width={20} height={20} className="opacity-70" />
     <div className="relative w-full flex items-center">
-      {/* The visible input element */}
       <input 
         type="range" 
         min="0"
@@ -20,15 +17,12 @@ const Slider = ({ iconSrc, alt, value, onChange }: { iconSrc: string; alt: strin
                    range-thumb:w-4 range-thumb:h-4 range-thumb:bg-white range-thumb:rounded-full 
                    range-thumb:appearance-none range-thumb:border-none range-thumb:shadow-md"
       />
-      {/* Background track */}
       <div className="absolute w-full h-1.5 bg-black/30 rounded-full"></div>
-      {/* Progress track */}
       <div className="absolute h-1.5 bg-theme-accent rounded-full" style={{ width: `${value}%` }}></div>
     </div>
   </div>
 );
 
-// Reusable button for complex items
 const ComplexToggle = ({ iconSrc, alt, label, sublabel, active, onClick }: { iconSrc: string; alt: string; label: string; sublabel?: string; active: boolean; onClick: () => void }) => (
   <div className={`flex rounded-lg min-h-[56px] ${active ? 'bg-theme-accent text-white' : 'bg-black/20 text-gray-300'}`}>
     <button onClick={onClick} className="flex-grow flex items-center space-x-2 p-2 rounded-l-lg hover:bg-white/10 transition-colors duration-150">
@@ -44,7 +38,6 @@ const ComplexToggle = ({ iconSrc, alt, label, sublabel, active, onClick }: { ico
   </div>
 );
 
-// Reusable button for simple items
 const SimpleToggle = ({ iconSrc, alt, label, active, onClick }: { iconSrc: string; alt: string; label: string; active: boolean; onClick: () => void }) => (
   <button 
     onClick={onClick}
