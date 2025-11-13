@@ -1,4 +1,3 @@
-// app/page.tsx
 import Desktop from "@/components/desktop/Desktop";
 import Dock from "@/components/desktop/Dock";
 import TopBar from "@/components/desktop/TopBar";
@@ -30,12 +29,8 @@ export default function Home() {
       >
         <source src="/live-wallpaper.mp4" type="video/mp4" />
       </video>
-
-      {/* Main UI shell with responsive flex direction */}
       <div className="relative z-10 h-full w-full flex flex-col">
-        {/* TopBar is always at the top */}
         <TopBar />
-        {/* This container handles the main layout */}
         <div className="flex flex-1 overflow-hidden pb-16 md:pb-0">
           <Dock appContents={appContents} />
           <Desktop appContents={appContents} />
