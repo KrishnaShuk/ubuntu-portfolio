@@ -174,14 +174,14 @@ export default function ProjectsWindowClient({ markdownContent, projects, contri
         </div>
 
         {isMenuOpen && (
-          <MobileMenu 
-            sections={sectionsForNav} 
-            activeSection={activeSectionName} 
-            setActiveSection={setCurrentView} 
+          <MobileMenu
+            sections={sectionsForNav}
+            activeSection={activeSectionName}
+            setActiveSection={setCurrentView}
             closeMenu={() => setIsMenuOpen(false)}
           />
         )}
-        
+
         {renderContent()}
       </div>
     </div>
