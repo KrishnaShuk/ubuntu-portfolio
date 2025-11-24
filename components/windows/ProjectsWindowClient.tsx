@@ -168,9 +168,9 @@ export default function ProjectsWindowClient({ markdownContent, projects, contri
         </div>
         <div>
           <a
-            href="/Krishna_Shukla_Resume.pdf"
+            href="/KrishnaResume.pdf"
             download
-            className="w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150"
+            className="flex items-center justify-center space-x-2 w-full px-3 py-2 rounded-lg text-gray-300 hover:border-gray-400 hover:bg-gray-700 hover:text-white transition-colors duration-150 bg-theme-accent text-white"
           >
             <FiDownload />
             <span className="font-medium text-sm">Download Resume</span>
