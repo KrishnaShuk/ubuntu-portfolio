@@ -6,14 +6,15 @@ import { Project } from '@/data/projects';
 import { Contribution } from '@/data/contributions';
 import ContributionsView from '../views/ContributionsView';
 import Image from 'next/image';
-import { FiArrowLeft, FiExternalLink, FiGithub, FiMenu, FiX } from 'react-icons/fi';
+import { FiArrowLeft, FiExternalLink, FiGithub, FiMenu, FiX, FiDownload } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import { clsx } from 'clsx';
+import React from 'react'; // Import React for ReactNode type
 
 // Combine all possible views into a single type
 type View = 'About Me' | { projectDetail: Project } | 'Experience' | 'Contributions' | 'ProjectsList';
 
-// --- Mobile Hamburger Menu Component ---
+// Mobile Hamburger Menu Component
 const MobileMenu = ({ sections, activeSection, setActiveSection, closeMenu }: { sections: string[], activeSection: string, setActiveSection: (view: View) => void, closeMenu: () => void }) => (
   <div className="md:hidden absolute top-0 left-0 w-full h-full bg-black/60 backdrop-blur-sm z-50 p-4">
     <div className="bg-[#2c2c2c] rounded-lg p-4">
@@ -68,7 +69,7 @@ export default function ProjectsWindowClient({ markdownContent, projects, contri
   const sectionsForNav = ['About Me', 'Projects', 'Experience', 'Contributions'];
   const activeSectionName = getActiveSectionName();
 
-  const renderContent = () => {
+  const renderContent = (): React.ReactNode => {
     if (typeof currentView === 'string' && markdownContent[currentView]) {
       return (
         <article className="prose prose-sm md:prose-base prose-invert prose-headings:text-white prose-p:text-gray-300 prose-li:text-gray-300">
@@ -124,47 +125,58 @@ export default function ProjectsWindowClient({ markdownContent, projects, contri
 
   return (
     <div className="flex h-full bg-[#303030] text-text-light rounded-b-lg">
-      <div className="hidden md:block w-56 bg-[#2c2c2c] p-3 flex-shrink-0">
-        <h2 className="text-lg font-bold mb-4 text-gray-200">Sections</h2>
-        <ul className="space-y-2">
-          <li>
-            <button
-              onClick={() => setCurrentView('About Me')}
-              className={clsx('w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150', {
-                'bg-theme-accent text-white': activeSectionName === 'About Me',
-                'hover:bg-white/10': activeSectionName !== 'About Me',
-              })}
-            >
-              About Me
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setCurrentView('ProjectsList')}
-              className={clsx('w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150', {
-                'bg-theme-accent text-white': activeSectionName === 'Projects',
-                'hover:bg-white/10': activeSectionName !== 'Projects',
-              })}
-            >
-              Projects
-            </button>
-          </li>
-          {['Experience', 'Contributions'].map((section) => (
-            <li key={section}>
+      <div className="hidden md:flex w-56 bg-[#2c2c2c] p-3 flex-shrink-0 flex-col justify-between">
+        <div>
+          <h2 className="text-lg font-bold mb-4 text-gray-200">Sections</h2>
+          <ul className="space-y-2">
+            <li>
               <button
-                onClick={() => setCurrentView(section as View)}
+                onClick={() => setCurrentView('About Me')}
                 className={clsx('w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150', {
-                  'bg-theme-accent text-white': activeSectionName === section,
-                  'hover:bg-white/10': activeSectionName !== section,
+                  'bg-theme-accent text-white': activeSectionName === 'About Me',
+                  'hover:bg-white/10': activeSectionName !== 'About Me',
                 })}
               >
-                {section}
+                About Me
               </button>
             </li>
-          ))}
-        </ul>
+            <li>
+              <button
+                onClick={() => setCurrentView('ProjectsList')}
+                className={clsx('w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150', {
+                  'bg-theme-accent text-white': activeSectionName === 'Projects',
+                  'hover:bg-white/10': activeSectionName !== 'Projects',
+                })}
+              >
+                Projects
+              </button>
+            </li>
+            {['Experience', 'Contributions'].map((section) => (
+              <li key={section}>
+                <button
+                  onClick={() => setCurrentView(section as View)}
+                  className={clsx('w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150', {
+                    'bg-theme-accent text-white': activeSectionName === section,
+                    'hover:bg-white/10': activeSectionName !== section,
+                  })}
+                >
+                  {section}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <a
+            href="/Krishna_Shukla_Resume.pdf"
+            download
+            className="w-full text-left px-3 py-2 rounded-lg text-gray-200 transition-colors duration-150"
+          >
+            <FiDownload />
+            <span className="font-medium text-sm">Download Resume</span>
+          </a>
+        </div>
       </div>
-
       <div className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto scrollbar-hide relative">
         <div className="md:hidden flex items-center justify-between mb-4 -mx-4 -mt-4 px-4 py-2 border-b border-white/10 bg-[#303030]">
           <span className="font-bold text-lg">{activeSectionName}</span>
@@ -172,16 +184,7 @@ export default function ProjectsWindowClient({ markdownContent, projects, contri
             <FiMenu size={20} />
           </button>
         </div>
-
-        {isMenuOpen && (
-          <MobileMenu
-            sections={sectionsForNav}
-            activeSection={activeSectionName}
-            setActiveSection={setCurrentView}
-            closeMenu={() => setIsMenuOpen(false)}
-          />
-        )}
-
+        {isMenuOpen && (<MobileMenu sections={sectionsForNav} activeSection={activeSectionName} setActiveSection={setCurrentView} closeMenu={() => setIsMenuOpen(false)} />)}
         {renderContent()}
       </div>
     </div>
